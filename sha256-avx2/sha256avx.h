@@ -22,6 +22,11 @@ static const unsigned int RC[] = {
     0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
+static const unsigned char BYTESWAP_MASK[] = {
+    0x3, 0x2, 0x1, 0x0, 0x7, 0x6, 0x5, 0x4, 0xb, 0xa, 0x9, 0x8, 0xf, 0xe, 0xd, 0xc,
+    0x3, 0x2, 0x1, 0x0, 0x7, 0x6, 0x5, 0x4, 0xb, 0xa, 0x9, 0x8, 0xf, 0xe, 0xd, 0xc,
+};
+
 #define u32 uint32_t
 #define u256 __m256i
 
@@ -73,7 +78,7 @@ typedef struct SHA256state {
 
 void transpose(u256 s[8]);
 void sha256_init8x(sha256ctx *ctx);
-void sha256_update8x(sha256ctx *ctx, 
+void sha256_update8x(sha256ctx *ctx,
                      const unsigned char *d0,
                      const unsigned char *d1,
                      const unsigned char *d2,
@@ -94,6 +99,11 @@ void sha256_final8x(sha256ctx *ctx,
                     unsigned char *out7);
 
 void sha256_transform8x(sha256ctx *ctx, const unsigned char *data);
+
+void sha256_transform8x_asm(sha256ctx *ctx,
+                        const unsigned char *data,
+                        const unsigned char *byteswap_mask,
+                        const unsigned int *RC);
 
 
 #endif

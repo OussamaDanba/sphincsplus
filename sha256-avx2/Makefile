@@ -3,7 +3,7 @@ CFLAGS = -g -Wall -Wextra -Wpedantic -O3 -march=native -fomit-frame-pointer -flt
 HASH_C = hash_sha256.c
 LDLIBS += -lcrypto
 
-SOURCES =          $(HASH_C) hash_sha256x8.c sha256avx.c address.c randombytes.c wots.c utils.c utilsx8.c fors.c sign.c
+SOURCES =          $(HASH_C) hash_sha256x8.c sha256avx.c address.c randombytes.c wots.c utils.c utilsx8.c fors.c sign.c sha256_transform8x_asm.s
 HEADERS = params.h hash.h    hashx8.h        sha256avx.h address.h randombytes.h wots.h utils.h utilsx8.h fors.h api.h
 
 DET_SOURCES = $(SOURCES:randombytes.%=rng.%)

@@ -73,7 +73,7 @@ void sha256_update8x(sha256ctx *ctx,
         ctx->datalen += bytes_to_copy;
         i += bytes_to_copy;
         if (ctx->datalen == 64) {
-            sha256_transform8x(ctx, ctx->msgblocks);
+            sha256_transform8x_asm(ctx, ctx->msgblocks, BYTESWAP_MASK, RC);
             ctx->msglen += 512;
             ctx->datalen = 0;
         }        
@@ -109,7 +109,7 @@ void sha256_final8x(sha256ctx *ctx,
                 ctx->msgblocks[64*i + curlen++] = 0x00;
             }
         }
-        sha256_transform8x(ctx, ctx->msgblocks);
+        sha256_transform8x_asm(ctx, ctx->msgblocks, BYTESWAP_MASK, RC);
         memset(ctx->msgblocks, 0, 8 * 64);
     }
 
@@ -125,7 +125,7 @@ void sha256_final8x(sha256ctx *ctx,
         ctx->msgblocks[64*i + 57] = ctx->msglen >> 48;
         ctx->msgblocks[64*i + 56] = ctx->msglen >> 56;
     }
-    sha256_transform8x(ctx, ctx->msgblocks);
+    sha256_transform8x_asm(ctx, ctx->msgblocks, BYTESWAP_MASK, RC);
 
     // Compute final hash output
     transpose(ctx->s);
